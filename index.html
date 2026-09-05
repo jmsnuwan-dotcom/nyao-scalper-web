@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#03101d" />
+  <title>Nyao Scalper — Live Signals</title>
+  <style>
+    :root{
+      --bg:#020b14; --panel:#061625; --panel2:#081c2d; --line:#12324b;
+      --text:#f4f8ff; --muted:#91a9c1; --green:#00f56a; --green2:#00c957;
+      --red:#ff3158; --gold:#d6a900; --blue:#55a9ff;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{min-height:100vh}
+    .app{width:100%;max-width:560px;margin:auto;padding:14px 12px 22px}
+    .top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:10px 8px 18px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .logo{
+      width:46px;height:46px;border-radius:14px;border:1px solid #1166a3;
+      display:grid;place-items:center;background:#06182a;color:#38a8ff;font-size:24px;
+    }
+    .brand h1{font-size:20px;line-height:1.1;margin:0;letter-spacing:-.4px}
+    .brand p{margin:4px 0 0;color:#16d8ff;font-size:11px;letter-spacing:2px;font-weight:700}
+    .connection{display:flex;align-items:center;gap:7px;color:#35ff88;font-size:12px;font-weight:700;white-space:nowrap}
+    .dot{width:9px;height:9px;border-radius:50%;background:#14f26a;box-shadow:0 0 12px #14f26a}
+    .card{
+      background:linear-gradient(145deg,#071a2b,#04111d);
+      border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    }
+    .signal-card{padding:16px}
+    .title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+    .title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:9px}
+    .title .dot{width:12px;height:12px}
+    .badges{display:flex;gap:7px}
+    .badge{font-size:12px;font-weight:800;padding:7px 10px;border-radius:9px;background:#1b2737;color:#d7e4f2}
+    .badge.tf{background:#806700;color:#fff2aa}
+    .instrument{font-size:25px;font-weight:900;letter-spacing:.3px}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .main-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+    .direction{min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+    .direction.buy{color:var(--green)} .direction.sell{color:var(--red)}
+    .signal-word{font-size:48px;line-height:.95;font-weight:950;letter-spacing:-2px;margin-top:30px}
+    .arrow{
+      font-size:92px;line-height:.8;font-weight:900;text-align:center;margin:12px 0 22px;
+      filter:drop-shadow(0 0 16px currentColor);
+      animation:float 1.6s ease-in-out infinite;
+    }
+    .sell .arrow{transform:rotate(180deg)}
+    @keyframes float{50%{transform:translateY(-5px)}}
+    @keyframes flash{50%{opacity:.22}}
+    .sell .arrow{animation:floatSell 1.6s ease-in-out infinite}
+    @keyframes floatSell{50%{transform:rotate(180deg) translateY(5px)}}
+    .time{font-size:11px;color:#a7bdd2;display:flex;align-items:center;gap:7px}
+    .metrics{border-left:1px solid #16344b;padding-left:14px}
+    .metric{padding:10px 0;border-bottom:1px solid #102b40;display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .metric:last-child{border-bottom:0}
+    .metric span{font-size:12px;color:#a5bbcf}
+    .metric b{font-size:15px;text-align:right}
+    .score{color:var(--green)!important;font-size:21px!important}
+    .exit{
+      margin-top:12px;padding:18px;border-radius:17px;border:1px solid var(--green);
+      background:linear-gradient(145deg,rgba(0,245,106,.13),rgba(0,50,29,.25));
+      color:var(--green);box-shadow:0 0 18px rgba(0,245,106,.12);
+    }
+    .exit.sell{color:var(--red);border-color:var(--red);background:linear-gradient(145deg,rgba(255,49,88,.13),rgba(50,0,12,.25))}
+    .exit-inner{display:flex;align-items:center;gap:15px}
+    .exit-arrow{font-size:56px;line-height:.8;font-weight:900;filter:drop-shadow(0 0 12px currentColor)}
+    .exit.flash .exit-arrow,.exit.flash .exit-label{animation:flash .75s step-end infinite}
+    .exit-label{font-size:25px;font-weight:950;letter-spacing:-.5px}
+    .strength{margin-top:8px;font-size:12px;color:#b8ccde}
+    .bar{height:10px;border-radius:99px;background:#1a3b57;margin-top:8px;overflow:hidden}
+    .fill{height:100%;width:73%;border-radius:99px;background:currentColor;box-shadow:0 0 10px currentColor}
+    .quick{margin-top:12px;padding:14px}
+    .quick-title{font-size:15px;font-weight:800;margin-bottom:10px}
+    .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .quick-item{background:#071b2d;border:1px solid #12334c;border-radius:12px;padding:11px}
+    .quick-item span{display:block;font-size:10px;color:#91a9c1;margin-bottom:4px}
+    .quick-item b{font-size:14px}
+    .green{color:var(--green)} .red{color:var(--red)}
+    .foot{padding:16px 4px 0;text-align:center;color:#55738e;font-size:10px}
+    @media(max-width:380px){
+      .app{padding:10px 9px 18px}
+      .main-grid{gap:10px}
+      .signal-word{font-size:41px}
+      .arrow{font-size:78px}
+      .metric span{font-size:11px}
+      .metric b{font-size:13px}
+      .exit-label{font-size:21px}
+    }
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">🐺</div>
+      <div><h1>Nyao Scalper</h1><p>LIVE SIGNALS</p></div>
+    </div>
+    <div class="connection"><span class="dot"></span><span id="connection">Connected</span></div>
+  </header>
+
+  <section class="card signal-card">
+    <div class="title-row">
+      <div class="title"><span class="dot"></span>Current Live Signal</div>
+      <div class="badges"><span class="badge" id="symbol">XAUUSD</span><span class="badge tf" id="timeframe">M1</span></div>
+    </div>
+
+    <div class="sub" id="instrumentName">Gold vs US Dollar</div>
+
+    <div class="main-grid">
+      <div class="direction buy" id="directionBox">
+        <div>
+          <div class="signal-word" id="signalWord">BUY</div>
+          <div class="arrow" id="signalArrow">↑</div>
+        </div>
+        <div class="time">◷ <span id="signalTime">2026-09-06 12:23:00</span></div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><span>Signal Score</span><b class="score" id="score">88</b></div>
+        <div class="metric"><span>Entry Price</span><b id="entry">2,364.52</b></div>
+        <div class="metric"><span>Current Price</span><b id="current">2,364.88</b></div>
+        <div class="metric"><span>Take Profit</span><b id="tp">2,366.50</b></div>
+        <div class="metric"><span>Stop Loss</span><b id="sl">2,362.50</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="exit" id="exitBox">
+    <div class="exit-inner">
+      <div class="exit-arrow" id="exitArrow">↑</div>
+      <div>
+        <div class="exit-label" id="exitLabel">EXIT SOON</div>
+        <div class="strength">Signal Strength: <b id="strength">73%</b></div>
+        <div class="bar"><div class="fill" id="strengthFill"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card quick">
+    <div class="quick-title">Quick Info</div>
+    <div class="quick-grid">
+      <div class="quick-item"><span>Direction</span><b class="green" id="quickDirection">BUY ↑</b></div>
+      <div class="quick-item"><span>Symbol</span><b id="quickSymbol">XAUUSD</b></div>
+      <div class="quick-item"><span>Timeframe</span><b id="quickTf">M1</b></div>
+      <div class="quick-item"><span>Signal Score</span><b class="green" id="quickScore">88</b></div>
+    </div>
+  </section>
+
+  <div class="foot">Live signal display • Data supplied by Nyao Scalper EA</div>
+</main>
+
+<script>
+  // Replace this demo object with the JSON received from your backend/API.
+  const demoSignal = {
+    connected: true,
+    symbol: "XAUUSD",
+    timeframe: "M1",
+    direction: "BUY",
+    score: 88,
+    entry: 2364.52,
+    current: 2364.88,
+    takeProfit: 2366.50,
+    stopLoss: 2362.50,
+    signalTime: "2026-09-06 12:23:00",
+    exitSoon: true,
+    strength: 73
+  };
+
+  function fmt(n) {
+    return Number(n).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 5});
+  }
+
+  function renderSignal(s) {
+    const buy = String(s.direction).toUpperCase() === "BUY";
+    const colorClass = buy ? "buy" : "sell";
+    const direction = buy ? "BUY" : "SELL";
+    const arrow = buy ? "↑" : "↓";
+
+    document.getElementById("directionBox").className = "direction " + colorClass;
+    document.getElementById("signalWord").textContent = direction;
+    document.getElementById("signalArrow").textContent = arrow;
+    document.getElementById("exitArrow").textContent = arrow;
+    document.getElementById("quickDirection").textContent = direction + " " + arrow;
+    document.getElementById("quickDirection").className = buy ? "green" : "red";
+
+    document.getElementById("symbol").textContent = s.symbol;
+    document.getElementById("timeframe").textContent = s.timeframe;
+    document.getElementById("quickSymbol").textContent = s.symbol;
+    document.getElementById("quickTf").textContent = s.timeframe;
+    document.getElementById("score").textContent = s.score;
+    document.getElementById("quickScore").textContent = s.score;
+    document.getElementById("entry").textContent = fmt(s.entry);
+    document.getElementById("current").textContent = fmt(s.current);
+    document.getElementById("tp").textContent = fmt(s.takeProfit);
+    document.getElementById("sl").textContent = fmt(s.stopLoss);
+    document.getElementById("signalTime").textContent = s.signalTime;
+    document.getElementById("connection").textContent = s.connected ? "Connected" : "Disconnected";
+
+    const exit = document.getElementById("exitBox");
+    exit.className = "exit " + (buy ? "" : "sell") + (s.exitSoon ? " flash" : "");
+    document.getElementById("strength").textContent = Math.round(s.strength) + "%";
+    document.getElementById("strengthFill").style.width = Math.max(0, Math.min(100, Number(s.strength))) + "%";
+  }
+
+  renderSignal(demoSignal);
+
+  /*
+    BACKEND CONTRACT (for the next step)
+    The web app expects one JSON object like:
+    {
+      "connected": true,
+      "symbol": "XAUUSD",
+      "timeframe": "M1",
+      "direction": "BUY",
+      "score": 88,
+      "entry": 2364.52,
+      "current": 2364.88,
+      "takeProfit": 2366.50,
+      "stopLoss": 2362.50,
+      "signalTime": "2026-09-06 12:23:00",
+      "exitSoon": true,
+      "strength": 73
+    }
+  */
+</script>
+</body>
+</html>
