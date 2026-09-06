@@ -2,7 +2,7 @@
   "name": "Nyao Scalper Live Signals",
   "short_name": "Nyao Scalper",
   "description": "Live Nyao Scalper trading signals.",
-  "start_url": "./index_connected.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

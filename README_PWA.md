@@ -20,3 +20,9 @@ Replace `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `index_connected.html`. Never 
 - Android Chrome: open the site, then use the browser Install/Add to Home screen option, or use the in-page Install button when Chrome exposes it.
 - iPhone/iPad Safari: Share → Add to Home Screen.
 - Desktop Chrome/Edge: use the install icon in the address bar when available.
+
+
+## Android 404 fix
+The PWA `start_url` now points to `./`, which resolves to the current
+`index.html`. The service-worker cache was also bumped to v2. This fixes the
+case where Android installation opened a Vercel `404 NOT_FOUND` page.
